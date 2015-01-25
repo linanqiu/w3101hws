@@ -1,11 +1,12 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  var doubleArray = function(arrayToDouble) {
-    // IMPLEMENT YOUR FUNCTION HERE
-    // MAKE SURE TO USE ARRAY'S MAP METHOD!
-  };
+	var doubleArray = function (arrayToDouble) {
+		return arrayToDouble.map(function (value) {
+			return value * 2;
+		});
+	};
 
-  module.exports = doubleArray;
+	module.exports = doubleArray;
 
 })();

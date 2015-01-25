@@ -1,10 +1,11 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  var sumArray = function sumArray(values) {
-    // IMPLEMENT YOUR SOLUTION HERE!
-    // MAKE SURE TO USE REDUCE!
-  };
+	var sumArray = function sumArray(values) {
+		return values.reduce(function (sum, current) {
+			return sum += current;
+		});
+	};
 
-  module.exports = sumArray; // DON'T CHANGE THIS
+	module.exports = sumArray; // DON'T CHANGE THIS
 })();

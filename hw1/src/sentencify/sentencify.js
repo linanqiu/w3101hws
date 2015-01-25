@@ -1,9 +1,13 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  var sentencify = function (words) {
-    // IMPLEMENT YOUR SOLUTION WITHIN THIS FUNCTION
-  };
+	var sentencify = function (words, joiner) {
+		if (joiner) {
+			return words.join(joiner);
+		} else {
+			return words.join(' ');
+		}
+	};
 
-  module.exports = sentencify;  // DO NOT CHANGE THIS
+	module.exports = sentencify; // DO NOT CHANGE THIS
 })();
