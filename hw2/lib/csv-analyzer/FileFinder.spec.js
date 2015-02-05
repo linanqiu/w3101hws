@@ -41,7 +41,7 @@
 
       it('should call the callback with an error message', function(done) {
         FileFinder(process.cwd() + '/lib/csv-analyzer/', 'html', function (err, data) {
-          expect(err.toString()).to.contain('Unable to find csv file');
+          expect(err.toString()).to.contain('Unable to find html file');
           done();
         });
       });
