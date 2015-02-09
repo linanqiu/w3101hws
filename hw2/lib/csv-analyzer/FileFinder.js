@@ -39,7 +39,7 @@
       });
 
       if (!matched) {
-        callback('Unable to find csv file', null);
+        callback(new Error('Unable to find ' + ext + ' file'), null);
       }
     });
   };
