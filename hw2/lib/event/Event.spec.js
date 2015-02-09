@@ -2,7 +2,7 @@
   'use strict';
 
   var Event = require('./Event'),
-      expect = require('chai').expect;
+    expect = require('chai').expect;
 
   function Stub() {
     return function _stub() {
@@ -11,8 +11,8 @@
     };
   }
 
-  describe('Simple Event test cases', function() {
-    it ('an Event constructor function should be defined', function () {
+  describe('Simple Event test cases', function () {
+    it('an Event constructor function should be defined', function () {
       expect(typeof Event).to.equal('function');
     });
 
@@ -22,11 +22,12 @@
       f3 = new Stub();
 
     it('an event object object should have ' +
-       '.subscribe, .unsubscribe and .emit methods', function () {
-      expect(typeof e.subscribe).to.equal('function');
-      expect(typeof e.unsubscribe).to.equal('function');
-      expect(typeof e.emit).to.equal('function');
-    });
+      '.subscribe, .unsubscribe and .emit methods',
+      function () {
+        expect(typeof e.subscribe).to.equal('function');
+        expect(typeof e.unsubscribe).to.equal('function');
+        expect(typeof e.emit).to.equal('function');
+      });
 
     it('an event object should emit values to subscribed handlers', function () {
       e.subscribe(f1);

@@ -6,7 +6,7 @@ Your goal is to write an Event constructor function, which can be used to make e
 
 The event object returned from the constructor function has:
 
-* `a subscribe()` method, which takes a function and stores it as a handler
+* a `subscribe()` method, which takes a function and stores it as a handler
 * an `unsubscribe()` method, which takes a function and removes it from its handlers
 * an `emit()` method, which takes an arbitrary number of arguments and calls all of the stored functions with these arguments.
 
