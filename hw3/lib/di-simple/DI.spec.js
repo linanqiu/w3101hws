@@ -2,13 +2,24 @@
   'use strict';
 
   var DI = require('./DI'),
-      expect = require('chai').expect;
+    expect = require('chai').expect;
 
-  describe('Inject dependencies', function() {
-    function MainCtrl () { return 'MainCtrl called'; }
-    function User () { return 'User Service invoked'; }
-    function Auth () { return 'Auth service'; }
-    function sum (a, b) { return a + b; }
+  describe('Inject dependencies', function () {
+    function MainCtrl() {
+      return 'MainCtrl called';
+    }
+
+    function User() {
+      return 'User Service invoked';
+    }
+
+    function Auth() {
+      return 'Auth service';
+    }
+
+    function sum(a, b) {
+      return a + b;
+    }
     var app;
 
     before(function () {
@@ -37,38 +48,43 @@
     });
 
     it('shouldn\'t pass any dependencies into the function if such ' +
-       'dependencies aren\'t specified',
-       function () {
-      var injectedFuncWithoutDependencies = app.inject(function () {
-        return arguments.length;
+      'dependencies aren\'t specified',
+      function () {
+        var injectedFuncWithoutDependencies = app.inject(function () {
+          return arguments.length;
+        });
+        expect(injectedFuncWithoutDependencies()).to.equal(0);
       });
-      expect(injectedFuncWithoutDependencies()).to.equal(0);
-    });
 
     it('shouldn\'t treat the parameters in nested functions as dependencies',
-       function () {
-      var injectedFuncWithNested = app.inject(function (app, login, Auth) {
-        function nested(d, e, f) {}
-        var args = Array.prototype.slice.call(arguments, 0);
-        return args.length;
+      function () {
+        var injectedFuncWithNested = app.inject(function (app, login, Auth) {
+          function nested(d, e, f) {}
+          var args = Array.prototype.slice.call(arguments, 0);
+          return args.length;
+        });
+        expect(injectedFuncWithNested()).to.equal(3);
       });
-      expect(injectedFuncWithNested()).to.equal(3);
-    });
 
     it('should handle dependencies that take their own set of arguments',
-        function() {
-      function mult (a, b) { return a * b; }
-      function subtract(a, b) { return a - b; }
-      app.register('mult', mult);
-      app.register('subtract', subtract);
-      var injectedFunc = app.inject(function (sum, subtract, mult) {
-        return subtract(mult(5, 4), sum(5, 4));
-      });
-      expect(injectedFunc()).to.equal(11);
-    });
+      function () {
+        function mult(a, b) {
+          return a * b;
+        }
 
-    describe('Recursive Dependencies', function() {
-      it('should handle dependencies with dependencies', function() {
+        function subtract(a, b) {
+          return a - b;
+        }
+        app.register('mult', mult);
+        app.register('subtract', subtract);
+        var injectedFunc = app.inject(function (sum, subtract, mult) {
+          return subtract(mult(5, 4), sum(5, 4));
+        });
+        expect(injectedFunc()).to.equal(11);
+      });
+
+    describe('Recursive Dependencies', function () {
+      it('should handle dependencies with dependencies', function () {
         var injectedFunc = app.inject(function (Auth, User, MainCtrl, sum) {
           return [Auth(), User(), MainCtrl(), sum(1, 2)].join(', ');
         });
