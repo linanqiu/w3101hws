@@ -22,7 +22,7 @@
       var moduleInstance = {
         funcs: {},
         name: name,
-        dependencies: [],
+        dependencies: dependencies,
         register: function (funcName, funcToRegister) {
           if (funcName === 'hasOwnProperty') {
             throw 'Module ' + name + ' is not available';
@@ -38,17 +38,26 @@
 
             var args = params.map(function (param) {
 
-              function searchParam(param, thisModule) {
+              function searchParam(param, thisModule, rootModule, meetCount) {
+                if (thisModule.name === rootModule.name) {
+                  if (meetCount > 0) {
+                    return undefined;
+                  }
+                  meetCount++;
+                }
+
                 if (thisModule.getRegisteredFunc(param)) {
-                  return thisModule.getRegisteredFunc(param);
+                  var foundParam = thisModule.getRegisteredFunc(param);
+                  return foundParam;
                 } else {
                   for (var i = 0; i < thisModule.dependencies.length; i++) {
                     var childModule = globalObject[thisModule.dependencies[i]];
-                    return searchParam(param, childModule);
+                    return searchParam(param, childModule, rootModule);
                   }
                 }
               }
-              return searchParam(param, self);
+              var foundParam = searchParam(param, self, self, 0);
+              return foundParam;
             });
 
             return func.apply(null, args);
@@ -60,30 +69,29 @@
       };
 
       // circular dependency check
-      function isCircular(rootModule, currentModule) {
-        if (currentModule.name === rootModule.name) {
-          console.log('checked');
-          return true;
-        } else {
-          var dependencies = currentModule.dependencies;
-          for (var i = 0; i < dependencies.length; i++) {
-            console.log(dependencies[i]);
-            console.log(rootModule.name);
-            var dependencyModule = globalObject[dependencies[i]];
-            return isCircular(rootModule, dependencyModule);
-          }
-        }
-        return false;
-      }
 
-      dependencies.forEach(function (dependency) {
-        var dependencyModule = globalObject[dependency];
-        if (!isCircular(moduleInstance, dependencyModule)) {
-          moduleInstance.dependencies.push(dependency);
-        }
-      });
+      // function isCircular(rootModule, currentModule) {
+      //   if (currentModule.name === rootModule.name) {
+      //     console.log('checked');
+      //     return true;
+      //   } else {
+      //     var dependencies = currentModule.dependencies;
+      //     for (var i = 0; i < dependencies.length; i++) {
+      //       console.log(dependencies[i]);
+      //       console.log(rootModule.name);
+      //       var dependencyModule = globalObject[dependencies[i]];
+      //       return isCircular(rootModule, dependencyModule);
+      //     }
+      //   }
+      //   return false;
+      // }
 
-      console.log(globalObject);
+      // dependencies.forEach(function (dependency) {
+      //   var dependencyModule = globalObject[dependency];
+      //   if (!isCircular(moduleInstance, dependencyModule)) {
+      //     moduleInstance.dependencies.push(dependency);
+      //   }
+      // });
 
       this.modules[name] = moduleInstance;
 
